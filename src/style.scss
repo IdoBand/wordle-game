@@ -1,8 +1,5 @@
-// ################################ tiles ################################
-
-
 $font-stack: Helvetica, sans-serif;
-$primary-color: #333;
+
 
 *{
     font: 100% $font-stack;
@@ -15,6 +12,20 @@ body {
     background-color: rgb(132, 235, 228);
     margin: 0;
 }
+
+body::-webkit-scrollbar {
+    width: 14px;               /* width of the entire scrollbar */
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: lightgrey;        /* color of the tracking area */
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background-color: white;    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 4px solid lightgray;  /* creates padding around scroll thumb */
+  }
 // ################################ header & dropdown ################################
 header { 
     display: flex;
@@ -86,7 +97,6 @@ header {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
-    
 }
 
 .menu-Links {
@@ -95,7 +105,6 @@ header {
     padding: .75rem;
     cursor: pointer;
     
-
     &:hover {
         background-color: darkcyan;
         color: white;
@@ -153,13 +162,17 @@ header {
     margin: 10px;
 }
 
+$default-tile-color: rgb(90, 83, 83);
+$bull-color: rgb(4, 188, 102);
+$cow-color : rgb(248, 248, 30);
+
 @mixin basicTile {
     gap: 2px;
     margin: 2px;
     height: 45px;
     width: 45px;
     border: 1px solid black;
-    background-color: rgb(90, 83, 83);
+    background-color: $default-tile-color;
     border-radius: 5px;
     box-shadow: 2px 2px black;
     font-size: 40px;
@@ -168,44 +181,53 @@ header {
     text-align: center;
 }
 
+
+
 .tile {
     @include basicTile();
 }
 
 .tile-bull {
     @include basicTile();
-    background-color: aqua;
+    background-color: $bull-color;
+    
 }
 
 .tile-cow {
     @include basicTile();
-    background-color: rgb(248, 248, 91);
+    background-color: $cow-color;
 }
 
 // ################################ dialog ################################
 
-#dialog {
-    visibility: hidden;
+@mixin basicDialogBox {
     display: flex;
     align-items: center;
     justify-content: center;
-
-
-#dialog-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 30px;
-    background-color: rgb(90, 83, 83);
-    border-radius: 10px;
-
-    h3 {
-        font-size: 16px;
-        color: white;
-    }
 }
 
+@mixin basicDialogMessage {
+    min-width: 100px;
+    height: 30px;
+    background-color: $default-tile-color;
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 3px;
+    color: white;
+}
+
+#dialog {
+    @include basicDialogBox();
+
+    .basic{
+        @include basicDialogBox();
+        @include basicDialogMessage();   
+    }
+    .victory{
+        @include basicDialogBox();
+        @include basicDialogMessage();
+        background-color: $bull-color;
+    }
 }
 
 // ################################ keyboard ################################
@@ -217,11 +239,14 @@ header {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    flex-grow: 1;
+    min-width: 600px;
 }
 
 .keyboard-row {
     margin: 5px;
     gap: 5px;
+    
 
 .key {
     height: 50px;
@@ -267,41 +292,53 @@ header {
 
 // ################################ letters-indicator-map ################################
 
+#keyboard-map-container{
+    display: flex;
+}
+
 #indicators-container {
-    background-color: rgb(90, 83, 83);
+    background-color: rgba(90, 83, 83, 0);
     border-radius: 10px;
     width: 170px;
-    height: 220px;
-    bottom: 40px;
-    left: 10px;
-    position: relative;
+    min-height: 180px;
+    box-shadow: 2px 2px 2px rgb(51, 51, 51);
+    border: 1px solid rgba(0, 0, 0, 0.147);
+
+    padding-left: 5px;
 }
 
 #letters-indicator-map {
     display: block;
     position: relative;
-    left: 2px;
+    padding-top: 5px;
 
     .indicator {
-        height: 50px;
-        width: 50px;
+        height: 40px;
+        width: 40px;
         border: 1px solid black;
         background-color: rgb(204, 188, 188);
         border-radius: 10px;
         box-shadow: 2px 2px;
         margin: 5px;
+        
     }
 
     #empty {
-        background-color: white;
+        background-color: $default-tile-color;
     }
     #cow {
-        background-color: rgb(248, 248, 91);
+        background-color: $cow-color;
     }
     #bull {
-        background-color: aqua;
+        background-color: $bull-color;
     }
 
+}
+
+// ################################       filler       ################################
+#filler {
+    min-width: 170px;
+    opacity: 0;
 }
 
 // ################################    Sign In Form    ################################
@@ -374,7 +411,7 @@ header {
         border-radius: 12px;
         border: 0;
         box-sizing: border-box;
-        color: #eee;
+        color: rgb(0, 0, 0);
         font-size: 18px;
         height: 100%;
         outline: 0;
@@ -404,7 +441,7 @@ header {
       }
       
       .placeholder {
-        color: #65657b;
+        color: #161657;
         font-family: sans-serif;
         left: 20px;
         line-height: 14px;

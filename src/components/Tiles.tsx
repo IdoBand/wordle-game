@@ -4,7 +4,7 @@ import { wordleContext } from "../providers/wordleContext";
 
 export default function Tiles() {
 
-  const {tiles} = useContext(wordleContext);
+  const {tiles} = useContext<any>(wordleContext);
 
     return (
          tiles.map(item => 

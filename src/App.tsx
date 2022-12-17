@@ -3,19 +3,23 @@ import { WordleApp } from './components/WordleApp';
 
 
 function App() {
-  // const test = () => {
 
-  // }
-
-  // document.addEventListener('keydown', (e) => {
-  //   console.log('e')
-  // })
+  document.addEventListener('keydown', (e) => {
+    console.log(e)
+    //   if (e.keyCode >= 65 && e.keyCode <= 90) {
+    //       addLetter(e.key.toUpperCase());
+    //   } else if (e.code === 'Backspace') {
+    //       removeLetter();
+    //   } else if (e.code === 'Enter') {
+    //       enterClickHandler();
+    //   }
+    });
   return (
     <>
     <WordleApp />
     </>
   )
-}
+};
 
 export default App
 

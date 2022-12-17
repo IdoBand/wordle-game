@@ -2,16 +2,21 @@ import { useState } from 'react';
 
 export function SharedLogicFunctions() {
 
-const wordBank = ['POWER', 'WORLD', 'PIZZA', 'BUILD', 'SUSHI', 'WIRED', 'WIERD', 'HELLO', 'REACT', 'ABORT'];
+const wordBank = ['POWER', 'WORLD', 'PIZZA', 'BUILD', 'SUSHI', 'WIRED', 'WIERD', 'HELLO', 'REACT', 'ABORT', 'GLOVE'];
 
-// .possibleToAdd is false when row is completed & word hasnt been checked.
+
+const [dialogMessage, setDialogMessage ] = useState({
+                                                    message: 'Good Luck!',
+                                                    className: 'basic'
+                                                                            });
+
 const [gameState, setGameState] = useState({
-                                            wordToGuess: 'POWER',
+                                            wordToGuess: 'REACT',
                                             possibleToAdd: true,
                                             possibleToRemove: true,
+                                            possibleToEnter: false,
                                             rowsFirstTile: 1,
                                             nextEmptyTile: 1,
-                                            rowsPlayed: [5],
                                             lastWordChecked: '',
                                                                 });
 
@@ -79,13 +84,13 @@ const addLetter = (letter: string) => {
         // nextEmptyTile: gameState.nextEmptyTile + 1})
         gameState.nextEmptyTile += 1;
         gameState.possibleToRemove = true;
-        console.log("next empty tile ADD", gameState.nextEmptyTile)
+        // console.log("next empty tile ADD", gameState.nextEmptyTile)
     }
     // if ((gameState.nextEmptyTile-1) % 5 === 0) gameState.possibleToAdd = false;
     
     if ((gameState.nextEmptyTile-1) % 5 === 0) setGameState({...gameState,
-                                                                possibleToAdd:false});
-
+                                                                possibleToAdd:false,
+                                                                possibleToEnter: true});
 };
 
 // returns the last tile that its content is not an empty string.
@@ -118,55 +123,78 @@ const removeLetter = () => {
         };
     };
     // check if the content of the first tile of the row is ''. if true disable remove.
-    if (findLastFullTile() as number % 5 === 0) {gameState.possibleToRemove = false};
+    if (findLastFullTile() as number % 5 === 0) {gameState.possibleToRemove = false
+                                                 gameState.possibleToEnter = false};
 };
 
-// when ENTER is clicked
-const ExtractWordFromRow = () => {
+const enterClickHandler = () => {
 
-    if ((findLastFullTile() as number) % 5 === 0){
+    if (gameState.possibleToEnter === true){
         let wordToCheck: string = '';
 
+        // extract the word from relevant row
+        // relevant to the gameState only!!!!
         const firstTileIndex: number = gameState.rowsFirstTile;
         tiles.forEach(tile => {
             if (firstTileIndex <= tile.id && tile.id <= firstTileIndex + 4) wordToCheck += tile.content});
 
-        console.log(wordToCheck)
-        
-        const x= gameState.rowsPlayed[gameState.rowsPlayed.length-1] + 5
-        gameState.rowsPlayed.push(x)
-        setGameState({...gameState,
-            possibleToAdd: true,
-            possibleToRemove: false,
-            rowsFirstTile: gameState.rowsFirstTile + 5,
-            lastWordChecked: wordToCheck,
-            
-            })
+        checkWordValidity();
 
+        setGameState({...gameState,
+                        possibleToAdd: true,
+                        possibleToRemove: false,
+                        possibleToEnter: false,
+                        rowsFirstTile: gameState.rowsFirstTile + 5,
+                        lastWordChecked: wordToCheck,
+            });
             // restart word to check
             wordToCheck = '';
-            console.log(gameState)
     };
 };
 
-// const checkWordValidity = (word: string) => {
-//     const tilesToCheck =[];
-//     for (let i = gameState.rowsFirstTile;  + gameState.rowsFirstTile + 4; i++) {
-//         tilesToCheck.push(i);
-//     }
-//     console.log(tilesToCheck)
-// }
+const checkWordValidity = () => {
+    // dinamically create an array of id's to decide which tiles to check
+    const tilesIdsToCheck: number[] =[];
+    for (let i = gameState.rowsFirstTile; i < gameState.rowsFirstTile+5; i++) {
+        tilesIdsToCheck.push(i)};
+
+        const newTiles: {id: number, content: string, className: string}[] = [];
+    
+    let counter = 0;
+    tiles.forEach(tile => {
+        if (tilesIdsToCheck.includes(tile.id)) {
+            tile.className = lettersHeadToHead(tile.content, counter);
+            counter += 1;
+        }
+        newTiles.push(tile)});
+    setTiles(newTiles);
+    counter = 0;
+    console.log(gameState)
+};
+
+// compares letters from guess to letters of word the user need to guess.
+const lettersHeadToHead = (tileContent: string, index: number) => {
+    const wordToGuess = gameState.wordToGuess;
+    if (tileContent === wordToGuess[index]) {
+        return 'tile-bull'
+    } else if (wordToGuess.includes(tileContent)) {
+        return 'tile-cow'
+    } else {
+        return 'tile'
+    }
+};
 
 
 return (
     {
+    dialogMessage,
     gameState,
     setGameState,
     tiles,
     setTiles,
     addLetter,
     removeLetter,
-    ExtractWordFromRow,
+    enterClickHandler,
 
     }
 )}

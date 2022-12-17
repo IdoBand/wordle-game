@@ -6,20 +6,31 @@ export default function Keyboard() {
     const {
         addLetter,
         removeLetter,
-        ExtractWordFromRow,
-    } = useContext(wordleContext)
+        enterClickHandler,
+    } = useContext<any>(wordleContext);
 
-    function HandleClick(event) {
+    function HandleClick(event: React.MouseEvent<HTMLButtonElement>) {
         const buttonClicked = event.target.id;
         if (buttonClicked !== 'enter' && buttonClicked !== 'back'){
-        addLetter(buttonClicked);
-        }
-        else if (buttonClicked === 'back') {
-            removeLetter();
+                addLetter(buttonClicked);
+        } else if (buttonClicked === 'back') {
+                removeLetter();
         } else {
-            ExtractWordFromRow();
+                enterClickHandler();
         }
-    }
+    };
+
+
+    // document.addEventListener('keydown', (e) => {
+    //     console.log(e)
+    //     //   if (e.keyCode >= 65 && e.keyCode <= 90) {
+    //     //       addLetter(e.key.toUpperCase());
+    //     //   } else if (e.code === 'Backspace') {
+    //     //       removeLetter();
+    //     //   } else if (e.code === 'Enter') {
+    //     //       enterClickHandler();
+    //     //   }
+    //     });
  
 
     return (

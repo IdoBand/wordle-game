@@ -1,3 +1,5 @@
 import { createContext } from "react";
 
-export const wordleContext = createContext(null);
+let initial: {} ={};
+
+export const wordleContext = createContext(initial);
