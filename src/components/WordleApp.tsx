@@ -8,8 +8,6 @@ import DialogMessage from './DialogMessage';
 export function WordleApp() {
 
   const wordleAPI = SharedLogicFunctions();
-
-  
   
   return (
     <wordleContext.Provider value={wordleAPI}>

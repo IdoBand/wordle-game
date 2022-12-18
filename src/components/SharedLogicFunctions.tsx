@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export function SharedLogicFunctions() {
 
 const wordBank = ['POWER', 'WORLD', 'PIZZA', 'BUILD', 'SUSHI', 'WIRED', 'WIERD', 'HELLO', 'REACT', 'ABORT', 'GLOVE'];
 
-
+// a message to interact with the user
 const [dialogMessage, setDialogMessage ] = useState({
                                                     message: 'Good Luck!',
                                                     className: 'basic'
                                                                             });
+
 
 const [gameState, setGameState] = useState({
                                             wordToGuess: 'REACT',
@@ -20,6 +21,34 @@ const [gameState, setGameState] = useState({
                                             lastWordChecked: '',
                                                                 });
 
+
+
+/// fix hebrew letters bug
+const handleKeyPressed = (event: KeyboardEvent) => {
+    const { key, 
+            keyCode} = event;
+
+    if (keyCode >= 65 && keyCode <= 90) {
+        addLetter(event.key.toUpperCase());
+    } else if (key === 'Backspace') {
+        removeLetter();
+    } else if (key === 'Enter') {
+        enterClickHandler();
+    }
+};
+
+const userInfo = {
+    name: 'user',
+    email: '',
+};
+
+useEffect(() => {
+    window.addEventListener("keyup", (handleKeyPressed));
+    return () => 
+        window.removeEventListener("keyup", handleKeyPressed);
+}, [handleKeyPressed]);
+
+// game board
 const [tiles, setTiles] = useState([
                                     {id:1, content: '', className: 'tile'},
                                     {id:2, content: '', className: 'tile'},
@@ -91,6 +120,8 @@ const addLetter = (letter: string) => {
     if ((gameState.nextEmptyTile-1) % 5 === 0) setGameState({...gameState,
                                                                 possibleToAdd:false,
                                                                 possibleToEnter: true});
+
+    console.log(gameState)
 };
 
 // returns the last tile that its content is not an empty string.
@@ -102,7 +133,7 @@ const findLastFullTile = () => {
             };
     };
     return tileIdToRemove;
-}
+};
 
 const removeLetter = () => {
     if (gameState.possibleToRemove === true) {
@@ -185,8 +216,11 @@ const lettersHeadToHead = (tileContent: string, index: number) => {
 };
 
 
+
+
 return (
     {
+    userInfo,
     dialogMessage,
     gameState,
     setGameState,
@@ -195,6 +229,5 @@ return (
     addLetter,
     removeLetter,
     enterClickHandler,
-
     }
 )}
