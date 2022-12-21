@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import DialogMessage from './DialogMessage';
 
 export function SharedLogicFunctions() {
 
@@ -183,15 +184,28 @@ const checkWordValidity = () => {
 
     const newTiles: {id: number, content: string, className: string}[] = [];
     
-    let counter = 0;
+    let letterIndex = 0;
+    let bullLetters = 0;
+    let cowLetters = 0;
+
     tiles.forEach(tile => {
         if (tilesIdsToCheck.includes(tile.id)) {
-            tile.className = lettersHeadToHead(tile.content, counter);
-            counter += 1;
+            tile.className = lettersHeadToHead(tile.content, letterIndex);
+
+            switch (tile.className) {
+                case 'tile-bull': bullLetters += 1;
+                case 'tile-cow': cowLetters +=1;
+                }
+            letterIndex += 1;
         }
         newTiles.push(tile)});
     setTiles(newTiles);
-    counter = 0;
+    
+    determineDialogMessage(bullLetters, cowLetters);
+    
+    letterIndex = 0;
+    bullLetters = 0;
+    cowLetters = 0;
 };
 
 // compares letters from guess to letters of word the user need to guess.
@@ -206,6 +220,34 @@ const lettersHeadToHead = (tileContent: string, index: number) => {
     }
 };
 
+const failMessages = [  'Nice Try!',
+                        'So Close!',
+                        'Don\'t Give Up Yet!',
+                        'You\'re Getting There!']
+const determineDialogMessage = (bullLetters: number, cowLetters: number) =>{
+    let newMessage: string = dialogMessage.message;
+    let newClassName: string = dialogMessage.className;
+    if ( bullLetters === 5 ) {
+        newMessage = 'Well Done!';
+        newClassName = 'victory';
+
+        const newGameState = {...gameState,
+                                possibleToAdd: false};
+        setGameState(newGameState);
+
+        console.log(gameState)
+    } else if (cowLetters > 0 ) {
+
+        newMessage = failMessages[Math.floor(Math.random() * failMessages.length)];
+    }
+
+    const newDialogMessage = {
+        message: newMessage,
+        className: newClassName,
+    }
+    setDialogMessage(newDialogMessage);
+
+};
 
 
 
