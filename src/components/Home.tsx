@@ -10,7 +10,7 @@ export function Home() {
     return (
     <>
         <main id="home-container">
-            <div id="welcome-message">Welcome! use the button on the right side of the header to navigate thruogh the site.</div>
+            <div id="welcome-message">Welcome User! use the button on the right side of the header to navigate thruogh the site.</div>
         </main>
     </>
     )

@@ -21,8 +21,6 @@ const [gameState, setGameState] = useState({
                                             lastWordChecked: '',
                                                                 });
 
-
-
 /// fix hebrew letters bug
 const handleKeyPressed = (event: KeyboardEvent) => {
     const { key, 
@@ -108,20 +106,14 @@ const addLetter = (letter: string) => {
             newTiles.push(tile)
         });
         setTiles(newTiles);
-        
-        // setGameState({...gameState,
-        // nextEmptyTile: gameState.nextEmptyTile + 1})
         gameState.nextEmptyTile += 1;
         gameState.possibleToRemove = true;
         // console.log("next empty tile ADD", gameState.nextEmptyTile)
     }
-    // if ((gameState.nextEmptyTile-1) % 5 === 0) gameState.possibleToAdd = false;
-    
-    if ((gameState.nextEmptyTile-1) % 5 === 0) setGameState({...gameState,
+    if ((gameState.nextEmptyTile-1) % 5 === 0) {setGameState({...gameState,
                                                                 possibleToAdd:false,
-                                                                possibleToEnter: true});
-
-    console.log(gameState)
+                                                                possibleToEnter: true})
+                                                                console.log('done')};
 };
 
 // returns the last tile that its content is not an empty string.
@@ -189,7 +181,7 @@ const checkWordValidity = () => {
     for (let i = gameState.rowsFirstTile; i < gameState.rowsFirstTile+5; i++) {
         tilesIdsToCheck.push(i)};
 
-        const newTiles: {id: number, content: string, className: string}[] = [];
+    const newTiles: {id: number, content: string, className: string}[] = [];
     
     let counter = 0;
     tiles.forEach(tile => {
@@ -200,7 +192,6 @@ const checkWordValidity = () => {
         newTiles.push(tile)});
     setTiles(newTiles);
     counter = 0;
-    console.log(gameState)
 };
 
 // compares letters from guess to letters of word the user need to guess.

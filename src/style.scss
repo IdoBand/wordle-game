@@ -1,11 +1,9 @@
 $font-stack: Helvetica, sans-serif;
 
-
 *{
     font: 100% $font-stack;
     text-decoration: none;
     list-style: none;
-    
 }
 
 body {
@@ -26,13 +24,18 @@ body::-webkit-scrollbar {
     border-radius: 20px;       /* roundness of the scroll thumb */
     border: 4px solid lightgray;  /* creates padding around scroll thumb */
   }
-// ################################ header & dropdown ################################
-header { 
+
+  @mixin flexCenter {
     display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+// ################################ header & dropdown ################################
+header {
+    @include flexCenter();
     background-color:white;
     border-bottom: solid;
     border-bottom-color: black;
-    align-items: center;
     justify-content: space-between;
     padding: 2px;
 
@@ -46,19 +49,26 @@ header {
         font-size: 30px;
         padding: 0;
         margin: 0;
-        text-decoration: none;
         text-shadow: 1px 1px;
         color: black;
     }
+
+    #user-hello-dropdown-container{
+        @include flexCenter();
+        
+        #user-hello {
+            @include flexCenter();
+            padding: 10px;
+        }
+    }
 }
 @mixin basicButton {
+    @include flexCenter();
     background-color: rgb(132, 235, 228);
     border-radius: 10px;
     border: 1.5px solid black;
     font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
     &:hover {
         background-color: darkcyan;
         color: white
@@ -200,12 +210,6 @@ $cow-color : rgb(248, 248, 30);
 
 // ################################ dialog ################################
 
-@mixin basicDialogBox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 @mixin basicDialogMessage {
     min-width: 100px;
     height: 30px;
@@ -217,14 +221,14 @@ $cow-color : rgb(248, 248, 30);
 }
 
 #dialog {
-    @include basicDialogBox();
+    @include flexCenter();
 
     .basic{
-        @include basicDialogBox();
+        @include flexCenter();
         @include basicDialogMessage();   
     }
     .victory{
-        @include basicDialogBox();
+        @include flexCenter();
         @include basicDialogMessage();
         background-color: $bull-color;
     }
@@ -235,9 +239,7 @@ $cow-color : rgb(248, 248, 30);
 #keyboard {
     padding: 0;
     margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flexCenter();
     flex-direction: column;
     flex-grow: 1;
     min-width: 600px;
@@ -311,6 +313,7 @@ $cow-color : rgb(248, 248, 30);
     display: block;
     position: relative;
     padding-top: 5px;
+    min-width: 150px;
 
     .indicator {
         height: 40px;
@@ -344,8 +347,7 @@ $cow-color : rgb(248, 248, 30);
 // ################################    Sign In Form    ################################
 
 #sign-in-form-container {
-    display: flex;
-    align-items: center;
+    @include flexCenter();
     margin-top: 20px;
     position: relative;
     width: 90%;
@@ -485,9 +487,7 @@ $cow-color : rgb(248, 248, 30);
 
 #home-container{
   
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flexCenter();
     height: 500px;
     width: 100%;
 

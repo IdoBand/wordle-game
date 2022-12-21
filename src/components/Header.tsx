@@ -1,11 +1,9 @@
 import * as logo from '../assets/logo.jpg';
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { useRef } from 'react';
 import HowToPlay from './HowToPlay';
-import SignInForm from './SignInForm';
 
-
+// user auth context????
 
 export default function Header() {
     const logoIMG = logo.default;
@@ -21,13 +19,18 @@ export default function Header() {
 
             <h1> | Wordle</h1>
             
-            <div className='dropdown'>
-                <button className='options'>&#9776;</button>
-                <div className='dropdown-menu'>
-                    <Link to={''} className='menu-Links'>Home Page</Link>
-                    <Link to={'SignInForm'} className='menu-Links'>Sign In</Link>
-                    <Link to={'App'} className='menu-Links'>Start Playing</Link>
-                    <div onClick={() => setModal(!modal)} className='menu-Links'>How To Play</div>
+            <div id="user-hello-dropdown-container">
+                <div id="user-hello">
+                    Hello User
+                </div>
+                <div className='dropdown'>
+                    <button className='options'>&#9776;</button>
+                    <div className='dropdown-menu'>
+                        <Link to={''} className='menu-Links'>Home Page</Link>
+                        <Link to={'SignInForm'} className='menu-Links'>Sign In</Link>
+                        <Link to={'App'} className='menu-Links'>Start Playing</Link>
+                        <div onClick={() => setModal(!modal)} className='menu-Links'>How To Play</div>
+                    </div>
                 </div>
             </div>
         </header>

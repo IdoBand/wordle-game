@@ -1,28 +1,47 @@
+import React from "react";
+import { useForm } from "react-hook-form";
+
 export default function SignInForm() {
+
+    const { register, handleSubmit } = useForm();
+    
+    let userFirstName: string;
+    let userLastName :string;
+    let userEmail: string; 
+
+    const extractAndAssign = (dataObject: {firstName: string, lastName: string, email: string}) => {
+        userFirstName = dataObject.firstName;
+        userLastName = dataObject.lastName;
+        userEmail = dataObject.email;
+
+        console.log(userFirstName, userEmail, userLastName)
+    }
     return (
         <>
             <div id="sign-in-form-container">
                 
-                <div className="form">
+                <form className="form" onSubmit={handleSubmit((data) => {
+                    extractAndAssign(data)
+                })}>
                     <div className="title">Welcome</div>
                     <div className="subtitle">Let's create your account!</div>
                     <div className="input-container ic1">
-                    <input id="firstname" className="input" type="text" placeholder=" "/>
-                    <div className="cut"></div>
-                    <label  className="placeholder">First name</label>
+                        <input {...register("firstName")} id="firstname" className="input" type="text" placeholder=" "/>
+                        <div className="cut"></div>
+                        <label className="placeholder">First name</label>
                     </div>
                     <div className="input-container ic2">
-                    <input id="lastname" className="input" type="text" placeholder=" " />
-                    <div className="cut"></div>
-                    <label  className="placeholder">Last name</label>
+                        <input {...register("lastName")} id="lastname" className="input" type="text" placeholder=" " />
+                        <div className="cut"></div>
+                        <label className="placeholder">Last name</label>
                     </div>
                     <div className="input-container ic2">
-                    <input id="email" className="input" type="text" placeholder=" " />
-                    <div className="cut cut-short"></div>
-                    <label className="placeholder">Email</label>
+                        <input {...register("email")} id="email" className="input" type="text" placeholder=" " />
+                        <div className="cut cut-short"></div>
+                        <label className="placeholder">Email</label>
                     </div>
                     <button className="submit">Submit</button>
-                </div>
+                </form>
                 <div id="text-container">
                     <h1>Wordle</h1>
                     <h1>Sign In & Keep Score</h1>
