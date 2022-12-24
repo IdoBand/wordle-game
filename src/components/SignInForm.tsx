@@ -8,15 +8,8 @@ export default function SignInForm() {
 
     const {user, setUser} = useContext<any>(userContext)
     
-    let userFirstName: string;
-    let userLastName :string;
-    let userEmail: string; 
-
     const extractAndAssign = (dataObject: {firstName: string, lastName: string, email: string}) => {
         setUser(dataObject)
-
-        console.log(userFirstName, userEmail, userLastName)
-
     }
     return (
         <>

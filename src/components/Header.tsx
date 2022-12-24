@@ -38,7 +38,7 @@ export default function Header() {
                         <Link to={'SignInForm'} className='menu-Links'>Sign In</Link>
                         <Link to={'App'} className='menu-Links'>Start Playing</Link>
                         <div onClick={() => setModal(!modal)} className='menu-Links'>How To Play</div>
-                        <div onClick={() =>setUser(null)} className='menu-Links' id="menu-Links-log-out">Log Out</div>
+                        <Link to={''} onClick={() =>setUser(null)} className='menu-Links' id="menu-Links-log-out">Log Out</Link>
                     </div>
                 </div>
             </div>
