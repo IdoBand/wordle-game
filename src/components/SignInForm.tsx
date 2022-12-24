@@ -1,20 +1,22 @@
-import React from "react";
+import { useContext } from "react";
+import { userContext } from "../providers/userContext";
 import { useForm } from "react-hook-form";
 
 export default function SignInForm() {
 
     const { register, handleSubmit } = useForm();
+
+    const {user, setUser} = useContext<any>(userContext)
     
     let userFirstName: string;
     let userLastName :string;
     let userEmail: string; 
 
     const extractAndAssign = (dataObject: {firstName: string, lastName: string, email: string}) => {
-        userFirstName = dataObject.firstName;
-        userLastName = dataObject.lastName;
-        userEmail = dataObject.email;
+        setUser(dataObject)
 
         console.log(userFirstName, userEmail, userLastName)
+
     }
     return (
         <>

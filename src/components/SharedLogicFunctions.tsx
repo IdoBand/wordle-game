@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
-import DialogMessage from './DialogMessage';
+import { useState, useEffect } from 'react';
 
 export function SharedLogicFunctions() {
 
@@ -11,14 +10,10 @@ const [dialogMessage, setDialogMessage ] = useState({
                                                     className: 'basic'
                                                                             });
 
-
 const [gameState, setGameState] = useState({
-                                            wordToGuess: 'REACT',
-                                            possibleToAdd: true,
-                                            possibleToRemove: true,
-                                            possibleToEnter: false,
-                                            rowsFirstTile: 1,
-                                            nextEmptyTile: 1,
+                                            wordToGuess: 'GLOVE',
+                                            currentRowFirstTile: 0,
+                                            currentTile: 0,
                                             lastWordChecked: '',
                                                                 });
 
@@ -49,72 +44,54 @@ useEffect(() => {
 
 // game board
 const [tiles, setTiles] = useState([
+                                    {id:0, content: '', className: 'tile'},
                                     {id:1, content: '', className: 'tile'},
                                     {id:2, content: '', className: 'tile'},
                                     {id:3, content: '', className: 'tile'},
                                     {id:4, content: '', className: 'tile'},
-                                    {id:5, content: '', className: 'tile'},
 
+                                    {id:5, content: '', className: 'tile'},
                                     {id:6, content: '', className: 'tile'},
                                     {id:7, content: '', className: 'tile'},
                                     {id:8, content: '', className: 'tile'},
                                     {id:9, content: '', className: 'tile'},
-                                    {id:10, content: '', className: 'tile'},
 
+                                    {id:10, content: '', className: 'tile'},
                                     {id:11, content: '', className: 'tile'},
                                     {id:12, content: '', className: 'tile'},
                                     {id:13, content: '', className: 'tile'},
                                     {id:14, content: '', className: 'tile'},
-                                    {id:15, content: '', className: 'tile'},
 
+                                    {id:15, content: '', className: 'tile'},
                                     {id:16, content: '', className: 'tile'},
                                     {id:17, content: '', className: 'tile'},
                                     {id:18, content: '', className: 'tile'},
                                     {id:19, content: '', className: 'tile'},
-                                    {id:20, content: '', className: 'tile'},
 
+                                    {id:20, content: '', className: 'tile'},
                                     {id:21, content: '', className: 'tile'},
                                     {id:22, content: '', className: 'tile'},
                                     {id:23, content: '', className: 'tile'},
                                     {id:24, content: '', className: 'tile'},
-                                    {id:25, content: '', className: 'tile'},
 
+                                    {id:25, content: '', className: 'tile'},
                                     {id:26, content: '', className: 'tile'},
                                     {id:27, content: '', className: 'tile'},
                                     {id:28, content: '', className: 'tile'},
                                     {id:29, content: '', className: 'tile'},
-                                    {id:30, content: '', className: 'tile'},
                             ]);
-
-// returns the first tile that its content is an empty string. if there isnt one => return undefined.
-const FindNextEmptyTile = () =>{
-    for (let tile of tiles) {
-        if (tile.content === '' ) return tile.id;;
-    };
-    return undefined;
-}
 
 const addLetter = (letter: string) => {
 
-    const emptyTileID = FindNextEmptyTile();
-
-    if (emptyTileID && gameState.possibleToAdd) {
-        
         const newTiles: {id: number, content: string, className: string}[] = [];
 
         tiles.forEach(tile => {
-            if (tile.id === emptyTileID) tile.content = letter;
+            if (tile.id === gameState.currentTile) tile.content = letter;
             newTiles.push(tile)
         });
         setTiles(newTiles);
-        gameState.nextEmptyTile += 1;
-        gameState.possibleToRemove = true;
-        // console.log("next empty tile ADD", gameState.nextEmptyTile)
-    }
-    if ((gameState.nextEmptyTile-1) % 5 === 0) {setGameState({...gameState,
-                                                                possibleToAdd:false,
-                                                                possibleToEnter: true})
-                                                                console.log('done')};
+
+    if (!( (gameState.currentTile+1) % 5 === 0)) gameState.currentTile += 1;
 };
 
 // returns the last tile that its content is not an empty string.
@@ -129,58 +106,43 @@ const findLastFullTile = () => {
 };
 
 const removeLetter = () => {
-    if (gameState.possibleToRemove === true) {
-        const tileIdToRemove = findLastFullTile();
-        if (tileIdToRemove) {
+    
+    const tileIdToRemove = findLastFullTile();
+    const currentRowFirstTile = gameState.currentRowFirstTile;
+ 
+    if (tileIdToRemove !== undefined && ( (currentRowFirstTile <= tileIdToRemove && tileIdToRemove <= currentRowFirstTile + 4))) {
 
-            const newTiles: {id: number, content: string, className: string}[] = [];
-            tiles.forEach(tile => {
-                if (tile.id === tileIdToRemove) tile.content = '';
-                newTiles.push(tile);
-            });
-            setTiles(newTiles);
-            // deletion occured -> update nextEmptyTile.
-            gameState.nextEmptyTile -= 1;
-            // when addLetter finds that the last tile of the row has been filled it disables possibleToAdd.
-            // so in case of entering 5 letters & no ENTER, enabling of addLetter is needed.
-            if (gameState.possibleToAdd === false) { gameState.possibleToAdd = true};
-        };
-    };
-    // check if the content of the first tile of the row is ''. if true disable remove.
-    if (findLastFullTile() as number % 5 === 0) {gameState.possibleToRemove = false
-                                                 gameState.possibleToEnter = false};
+        const newTiles: {id: number, content: string, className: string}[] = [];
+        tiles.forEach(tile => {
+            if (tile.id === tileIdToRemove ) tile.content = '';
+            newTiles.push(tile);
+        });
+        setTiles(newTiles);
+        // deletion occured -> update current tile.
+        gameState.currentTile = tileIdToRemove;
+    };                                   
 };
 
 const enterClickHandler = () => {
 
-    if (gameState.possibleToEnter === true){
-        let wordToCheck: string = '';
+    if (tiles[gameState.currentRowFirstTile +4].content !== ''){
 
+        let wordToCheck: string = '';
         // extract the word from relevant row
-        // relevant to the gameState only!!!!
-        const firstTileIndex: number = gameState.rowsFirstTile;
-        tiles.forEach(tile => {
-            if (firstTileIndex <= tile.id && tile.id <= firstTileIndex + 4) wordToCheck += tile.content});
+        const firstTileIndex: number = gameState.currentRowFirstTile;
+        for (let i = firstTileIndex; i <= firstTileIndex+4 ; i++) {wordToCheck += tiles[i].content;}
 
         checkWordValidity();
-
+       
         setGameState({...gameState,
-                        possibleToAdd: true,
-                        possibleToRemove: false,
-                        possibleToEnter: false,
-                        rowsFirstTile: gameState.rowsFirstTile + 5,
-                        lastWordChecked: wordToCheck,
-            });
-            // restart word to check
-            wordToCheck = '';
+                        currentRowFirstTile: gameState.currentRowFirstTile + 5,
+                        lastWordChecked: wordToCheck,});
+        // restart word to check
+        wordToCheck = '';
     };
 };
 
 const checkWordValidity = () => {
-    // dinamically create an array of id's to decide which tiles to check
-    const tilesIdsToCheck: number[] =[];
-    for (let i = gameState.rowsFirstTile; i < gameState.rowsFirstTile+5; i++) {
-        tilesIdsToCheck.push(i)};
 
     const newTiles: {id: number, content: string, className: string}[] = [];
     
@@ -189,7 +151,7 @@ const checkWordValidity = () => {
     let cowLetters = 0;
 
     tiles.forEach(tile => {
-        if (tilesIdsToCheck.includes(tile.id)) {
+        if ( gameState.currentRowFirstTile <= tile.id && tile.id <= gameState.currentRowFirstTile + 4) {
             tile.className = lettersHeadToHead(tile.content, letterIndex);
 
             switch (tile.className) {
@@ -200,6 +162,8 @@ const checkWordValidity = () => {
         }
         newTiles.push(tile)});
     setTiles(newTiles);
+
+    gameState.currentTile += 1;
     
     determineDialogMessage(bullLetters, cowLetters);
     
@@ -223,33 +187,22 @@ const lettersHeadToHead = (tileContent: string, index: number) => {
 const failMessages = [  'Nice Try!',
                         'So Close!',
                         'Don\'t Give Up Yet!',
-                        'You\'re Getting There!']
+                        'You\'re Getting There!'];
 const determineDialogMessage = (bullLetters: number, cowLetters: number) =>{
     let newMessage: string = dialogMessage.message;
     let newClassName: string = dialogMessage.className;
     if ( bullLetters === 5 ) {
         newMessage = 'Well Done!';
         newClassName = 'victory';
-
-        const newGameState = {...gameState,
-                                possibleToAdd: false};
-        setGameState(newGameState);
-
-        console.log(gameState)
     } else if (cowLetters > 0 ) {
-
         newMessage = failMessages[Math.floor(Math.random() * failMessages.length)];
     }
-
     const newDialogMessage = {
         message: newMessage,
         className: newClassName,
     }
     setDialogMessage(newDialogMessage);
-
 };
-
-
 
 return (
     {

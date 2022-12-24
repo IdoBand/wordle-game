@@ -2,6 +2,8 @@ import * as logo from '../assets/logo.jpg';
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import HowToPlay from './HowToPlay';
+import { useContext } from 'react';
+import { userContext } from '../providers/userContext';
 
 // user auth context????
 
@@ -10,7 +12,7 @@ export default function Header() {
 
     const [modal, setModal] = useState(false);
 
-    
+    const {user, setUser} = useContext<any>(userContext)
 
     return (
     <>
@@ -20,9 +22,15 @@ export default function Header() {
             <h1> | Wordle</h1>
             
             <div id="user-hello-dropdown-container">
-                <div id="user-hello">
-                    Hello User
+                <div>
+                    
                 </div>
+                {user? 
+                <div id="user-hello"> Hello {user.firstName}</div>
+                :
+                <div id="user-hello">Sign In &#10154;</div>
+                }
+                
                 <div className='dropdown'>
                     <button className='options'>&#9776;</button>
                     <div className='dropdown-menu'>
@@ -30,6 +38,7 @@ export default function Header() {
                         <Link to={'SignInForm'} className='menu-Links'>Sign In</Link>
                         <Link to={'App'} className='menu-Links'>Start Playing</Link>
                         <div onClick={() => setModal(!modal)} className='menu-Links'>How To Play</div>
+                        <div onClick={() =>setUser(null)} className='menu-Links' id="menu-Links-log-out">Log Out</div>
                     </div>
                 </div>
             </div>
@@ -46,7 +55,7 @@ export default function Header() {
             </main>
         )}
         
-        <Outlet />
+    <Outlet />
     </>
     );
   }

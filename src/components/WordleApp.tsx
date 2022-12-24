@@ -4,6 +4,8 @@ import IndicatorsMap from './IndicatorsMap';
 import { SharedLogicFunctions } from './SharedLogicFunctions';
 import { wordleContext } from '../providers/wordleContext';
 import DialogMessage from './DialogMessage';
+import { useContext } from 'react';
+import { userContext } from '../providers/userContext';
 
 export function WordleApp() {
 

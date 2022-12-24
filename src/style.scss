@@ -36,13 +36,17 @@ header {
     background-color:white;
     border-bottom: solid;
     border-bottom-color: black;
-    justify-content: space-between;
+    min-height: 50px;
+
     padding: 2px;
+    position: relative;
 
     img {
         width: 50px;
         height: 50px;
         border-radius: 30px;
+        position: absolute;
+        left: 5px;
     }
 
     h1 {
@@ -55,10 +59,13 @@ header {
 
     #user-hello-dropdown-container{
         @include flexCenter();
+        position: absolute;
+        right: 5px;
         
         #user-hello {
             @include flexCenter();
             padding: 10px;
+            font-size: 20px;
         }
     }
 }
@@ -120,6 +127,12 @@ header {
         color: white;
         pointer-events: auto;
 
+    }
+}
+
+#menu-Links-log-out{
+    &:hover {
+        background-color: rgb(221, 118, 118);
     }
 }
 
@@ -292,23 +305,21 @@ $cow-color : rgb(248, 248, 30);
     }
 }
 
-
-
 // ################################ letters-indicator-map ################################
 
 #keyboard-map-container{
     display: flex;
+    margin-top: 10px;
 }
 
 #indicators-container {
-    background-color: rgba(90, 83, 83, 0);
-    border-radius: 10px;
+    left: 20px;
     width: 170px;
+    border-radius: 5px;
     min-height: 180px;
-    box-shadow: 2px 2px 2px rgb(51, 51, 51);
-    border: 1px solid rgba(0, 0, 0, 0.147);
-
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
     padding-left: 5px;
+    padding-bottom: 5px;
 }
 
 #letters-indicator-map {
@@ -350,18 +361,21 @@ $cow-color : rgb(248, 248, 30);
 
 #sign-in-form-container {
     @include flexCenter();
-    margin-top: 20px;
+    margin-top: 60px;
     position: relative;
     width: 90%;
-    justify-content: space-around;
+
 
     
-
+    form {
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
     #text-container{
         position: relative;
         overflow-wrap: break-word;
         z-index: -1;
-        left: 0;
+        left: 60px;
+
     
         h1 {
             font-weight: bolder;
