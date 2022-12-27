@@ -91,7 +91,11 @@ const addLetter = (letter: string) => {
         });
         setTiles(newTiles);
 
-    if (!( (gameState.currentTile+1) % 5 === 0)) gameState.currentTile += 1;
+    if (!( (gameState.currentTile+1) % 5 === 0)) {
+        gameState.currentTile += 1;
+    } else {
+        console.log('done');
+    };
 };
 
 // returns the last tile that its content is not an empty string.
