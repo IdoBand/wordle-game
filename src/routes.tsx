@@ -2,10 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import { Home } from './components/Home'
 import { WordleApp } from './components/WordleApp';
-import Header from './components/Header';
 import SignInForm from './components/SignInForm';
-
-
 
 export const router = createBrowserRouter([
     {

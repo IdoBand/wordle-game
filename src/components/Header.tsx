@@ -1,11 +1,12 @@
 import * as logo from '../assets/logo.jpg';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import HowToPlay from './HowToPlay';
-import { useContext } from 'react';
 import { userContext } from '../providers/userContext';
+import { wordleContext } from '../providers/wordleContext';
+import { serverReqContext } from '../providers/serverReqContext';
 
-// user auth context????
+
 
 export default function Header() {
     const logoIMG = logo.default;
@@ -14,19 +15,30 @@ export default function Header() {
 
     const {user, setUser} = useContext<any>(userContext)
 
+    const {getWordFromServer} = useContext<any>(wordleContext);
+
+    let localStorageUser = JSON.parse(localStorage.getItem('user') as string)
+
+    const logOutuser = () =>{
+        localStorage.removeItem('user')
+        setUser(null)
+    }
+    useEffect(() => {}, [localStorageUser])
+
     return (
     <>
         <header className="header">
             <img className="logo" src={logoIMG} alt="logo" />
 
-            <h1> | Wordle</h1>
+            <h1> | Wordle
+            </h1>
             
             <div id="user-hello-dropdown-container">
                 <div>
                     
                 </div>
-                {user? 
-                <div id="user-hello"> Hello {user.firstName}</div>
+                {localStorageUser? 
+                <div id="user-hello"> Hello {localStorageUser.firstName}</div>
                 :
                 <div id="user-hello">Sign In &#10154;</div>
                 }
@@ -36,9 +48,9 @@ export default function Header() {
                     <div className='dropdown-menu'>
                         <Link to={''} className='menu-Links'>Home Page</Link>
                         <Link to={'SignInForm'} className='menu-Links'>Sign In</Link>
-                        <Link to={'App'} className='menu-Links'>Start Playing</Link>
+                        <Link to={'App'} className='menu-Links' onClick={() => getWordFromServer()}>Start Playing</Link>
                         <div onClick={() => setModal(!modal)} className='menu-Links'>How To Play</div>
-                        <Link to={''} onClick={() =>setUser(null)} className='menu-Links' id="menu-Links-log-out">Log Out</Link>
+                        <Link to={''} onClick={() =>logOutuser()} className='menu-Links' id="menu-Links-log-out">Log Out</Link>
                     </div>
                 </div>
             </div>

@@ -1,25 +1,30 @@
 import { useContext } from "react";
 import { userContext } from "../providers/userContext";
 import { useForm } from "react-hook-form";
+import { UserObject } from "../interface/interface"
+
 
 export default function SignInForm() {
 
     const { register, handleSubmit } = useForm();
 
-    const {user, setUser} = useContext<any>(userContext)
+    const {user, setUser} = useContext<any>(userContext);
     
-    const extractAndAssign = (dataObject: {firstName: string, lastName: string, email: string}) => {
-        setUser(dataObject)
-    }
+    const extractAndAssign = (userObject: UserObject) => {
+        localStorage.setItem('user', JSON.stringify(userObject))
+        // const currentUser = JSON.parse(localStorage.getItem('user') as string)
+        setUser(userObject)
+    };
     return (
         <>
             <div id="sign-in-form-container">
                 
                 <form className="form" onSubmit={handleSubmit((data) => {
+                    console
                     extractAndAssign(data)
                 })}>
                     <div className="title">Welcome</div>
-                    <div className="subtitle">Let's create your account!</div>
+                    <div className="subtitle">Sign in to your account!</div>
                     <div className="input-container ic1">
                         <input {...register("firstName")} id="firstname" className="input" type="text" placeholder=" "/>
                         <div className="cut"></div>

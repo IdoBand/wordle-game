@@ -2,6 +2,9 @@ import './style.scss';
 import { useState, useMemo } from 'react';
 import { userContext } from './providers/userContext';
 import Header from './components/Header';
+import { SharedLogicFunctions } from './components/SharedLogicFunctions';
+import { wordleContext } from './providers/wordleContext';
+
 
 function App() {
 
@@ -9,10 +12,15 @@ function App() {
 
   const providerValue = useMemo(() => ({user, setUser}), [user, setUser])
 
+  const wordleAPI = SharedLogicFunctions();
+  
+
   return (
     <>
       <userContext.Provider value={providerValue}>
-        <Header />
+        <wordleContext.Provider value={wordleAPI}>
+          <Header />
+        </wordleContext.Provider>
       </userContext.Provider>
     </>
     
@@ -21,3 +29,6 @@ function App() {
 
 export default App
 
+
+
+    // 

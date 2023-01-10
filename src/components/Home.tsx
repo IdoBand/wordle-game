@@ -8,9 +8,12 @@ export function Home() {
 
     return (
     <>
-    <main id="home-container">
-        <div id="welcome-message">Welcome {user? user.firstName: ''}! use the button on the right side of the header to navigate thruogh the site.</div>
-    </main>
+        <div id="welcome-container">
+            <div id="welcome-message">
+                Welcome {user? user.firstName: ''}! use the button on the right side of the header to navigate thruogh the site.
+            </div>
+        </div>
     </>
     )
 }
+

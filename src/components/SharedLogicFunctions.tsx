@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect, useContext } from 'react';
+import { Tile } from '../interface/interface';
+import { EncryptedObject } from '../interface/interface';
 export function SharedLogicFunctions() {
 
-const wordBank = ['POWER', 'WORLD', 'PIZZA', 'BUILD', 'SUSHI', 'WIRED', 'WIERD', 'HELLO', 'REACT', 'ABORT', 'GLOVE'];
+
 
 // a message to interact with the user
 const [dialogMessage, setDialogMessage ] = useState({
@@ -11,11 +12,37 @@ const [dialogMessage, setDialogMessage ] = useState({
                                                                             });
 
 const [gameState, setGameState] = useState({
-                                            wordToGuess: 'GLOVE',
                                             currentRowFirstTile: 0,
                                             currentTile: 0,
                                             lastWordChecked: '',
                                                                 });
+
+
+
+const [encryptedObject, setEncryptedObject] = useState(null)
+async function getWordFromServer() {
+
+    const response = await fetch('http://localhost:4000/getWord');
+    const encryptedObject = await response.json();
+    setEncryptedObject(encryptedObject);
+};
+
+
+
+async function checkWordAtServer (guess: string, requestObject: EncryptedObject = encryptedObject!) {
+    if (requestObject) {
+        const attempt = {guess: guess,
+                        encryptedWord: requestObject.encrypted,
+                        iv: requestObject.iv.data
+                        }
+        const response = await fetch(`http://localhost:4000/guessWord`, {method: 'post',
+                                                                        headers: {'Content-Type': 'application/json'},
+                                                                        body: JSON.stringify(attempt)});
+                        
+        const resultArray = await response.json();
+        return resultArray;
+    };
+};
 
 /// fix hebrew letters bug
 const handleKeyPressed = (event: KeyboardEvent) => {
@@ -83,7 +110,7 @@ const [tiles, setTiles] = useState([
 
 const addLetter = (letter: string) => {
 
-        const newTiles: {id: number, content: string, className: string}[] = [];
+        const newTiles: Tile[] = [];
 
         tiles.forEach(tile => {
             if (tile.id === gameState.currentTile) tile.content = letter;
@@ -93,9 +120,7 @@ const addLetter = (letter: string) => {
 
     if (!( (gameState.currentTile+1) % 5 === 0)) {
         gameState.currentTile += 1;
-    } else {
-        console.log('done');
-    };
+    } 
 };
 
 // returns the last tile that its content is not an empty string.
@@ -116,7 +141,7 @@ const removeLetter = () => {
  
     if (tileIdToRemove !== undefined && ( (currentRowFirstTile <= tileIdToRemove && tileIdToRemove <= currentRowFirstTile + 4))) {
 
-        const newTiles: {id: number, content: string, className: string}[] = [];
+        const newTiles: Tile[] = [];
         tiles.forEach(tile => {
             if (tile.id === tileIdToRemove ) tile.content = '';
             newTiles.push(tile);
@@ -136,19 +161,28 @@ const enterClickHandler = () => {
         const firstTileIndex: number = gameState.currentRowFirstTile;
         for (let i = firstTileIndex; i <= firstTileIndex+4 ; i++) {wordToCheck += tiles[i].content;}
 
-        checkWordValidity();
+        
        
         setGameState({...gameState,
                         currentRowFirstTile: gameState.currentRowFirstTile + 5,
                         lastWordChecked: wordToCheck,});
+
+        checkWordAtServer(wordToCheck)
+            .then(res => {
+                if (res) {checkWordValidity(res)}
+                console.log(res)});
+            
+
+   
         // restart word to check
         wordToCheck = '';
+
     };
 };
 
-const checkWordValidity = () => {
+const checkWordValidity = (resultArray: string[]) => {
 
-    const newTiles: {id: number, content: string, className: string}[] = [];
+    const newTiles: Tile[] = [];
     
     let letterIndex = 0;
     let bullLetters = 0;
@@ -156,7 +190,7 @@ const checkWordValidity = () => {
 
     tiles.forEach(tile => {
         if ( gameState.currentRowFirstTile <= tile.id && tile.id <= gameState.currentRowFirstTile + 4) {
-            tile.className = lettersHeadToHead(tile.content, letterIndex);
+            tile.className = resultArray[letterIndex][1];
 
             switch (tile.className) {
                 case 'tile-bull': bullLetters += 1;
@@ -167,8 +201,9 @@ const checkWordValidity = () => {
         newTiles.push(tile)});
     setTiles(newTiles);
 
-    gameState.currentTile += 1;
     
+
+
     determineDialogMessage(bullLetters, cowLetters);
     
     letterIndex = 0;
@@ -176,22 +211,14 @@ const checkWordValidity = () => {
     cowLetters = 0;
 };
 
-// compares letters from guess to letters of word the user need to guess.
-const lettersHeadToHead = (tileContent: string, index: number) => {
-    const wordToGuess = gameState.wordToGuess;
-    if (tileContent === wordToGuess[index]) {
-        return 'tile-bull'
-    } else if (wordToGuess.includes(tileContent)) {
-        return 'tile-cow'
-    } else {
-        return 'tile'
-    }
-};
+
 
 const failMessages = [  'Nice Try!',
                         'So Close!',
                         'Don\'t Give Up Yet!',
-                        'You\'re Getting There!'];
+                        'You\'re Getting There!',
+                        'Almost!',
+                        'Keep Trying!'];
 const determineDialogMessage = (bullLetters: number, cowLetters: number) =>{
     let newMessage: string = dialogMessage.message;
     let newClassName: string = dialogMessage.className;
@@ -206,6 +233,10 @@ const determineDialogMessage = (bullLetters: number, cowLetters: number) =>{
         className: newClassName,
     }
     setDialogMessage(newDialogMessage);
+    setGameState({...gameState,
+        currentTile: gameState.currentTile + 1,
+        currentRowFirstTile: gameState.currentRowFirstTile+5})
+    
 };
 
 return (
@@ -219,5 +250,8 @@ return (
     addLetter,
     removeLetter,
     enterClickHandler,
+    getWordFromServer,
+    encryptedObject,
+    checkWordAtServer,
     }
 )}

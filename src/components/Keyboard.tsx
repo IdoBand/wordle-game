@@ -10,6 +10,7 @@ export default function Keyboard() {
         addLetter,
         removeLetter,
         enterClickHandler,
+        checkWordAtServer,
     } = useContext<any>(wordleContext);
 
     function HandleClick(event: React.MouseEvent<HTMLButtonElement>) {
