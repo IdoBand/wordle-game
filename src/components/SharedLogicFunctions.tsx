@@ -1,6 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Tile } from '../interface/interface';
 import { EncryptedObject } from '../interface/interface';
+import { serverReqContext } from '../providers/serverReqContext';
 export function SharedLogicFunctions() {
 
 
@@ -14,10 +16,8 @@ const [dialogMessage, setDialogMessage ] = useState({
 const [gameState, setGameState] = useState({
                                             currentRowFirstTile: 0,
                                             currentTile: 0,
-                                            lastWordChecked: '',
+                                            guessAttempts: 0
                                                                 });
-
-
 
 const [encryptedObject, setEncryptedObject] = useState(null)
 async function getWordFromServer() {
@@ -26,7 +26,6 @@ async function getWordFromServer() {
     const encryptedObject = await response.json();
     setEncryptedObject(encryptedObject);
 };
-
 
 
 async function checkWordAtServer (guess: string, requestObject: EncryptedObject = encryptedObject!) {
@@ -44,30 +43,26 @@ async function checkWordAtServer (guess: string, requestObject: EncryptedObject 
     };
 };
 
-/// fix hebrew letters bug
-const handleKeyPressed = (event: KeyboardEvent) => {
-    const { key, 
-            keyCode} = event;
 
-    if (keyCode >= 65 && keyCode <= 90) {
-        addLetter(event.key.toUpperCase());
-    } else if (key === 'Backspace') {
-        removeLetter();
-    } else if (key === 'Enter') {
-        enterClickHandler();
-    }
-};
 
 const userInfo = {
     name: 'user',
     email: '',
 };
 
-useEffect(() => {
-    window.addEventListener("keyup", (handleKeyPressed));
-    return () => 
-        window.removeEventListener("keyup", handleKeyPressed);
-}, [handleKeyPressed]);
+
+// let location =useLocation()
+
+// useEffect(()=> {
+//     console.log(location)
+//     if (location.pathname === '/App') {
+//         window.addEventListener("keyup", (handleKeyPressed));
+//         console.log('added event listener')
+//     } else {
+//         window.removeEventListener("keyup", handleKeyPressed);
+//         console.log('removed event listener')
+//     }
+// },[])
 
 // game board
 const [tiles, setTiles] = useState([
@@ -109,7 +104,7 @@ const [tiles, setTiles] = useState([
                             ]);
 
 const addLetter = (letter: string) => {
-
+    if (gameState.currentTile !== 999) {
         const newTiles: Tile[] = [];
 
         tiles.forEach(tile => {
@@ -121,6 +116,27 @@ const addLetter = (letter: string) => {
     if (!( (gameState.currentTile+1) % 5 === 0)) {
         gameState.currentTile += 1;
     } 
+    }
+};
+
+const resetGame = () => {
+    const newTiles: Tile[] = [];
+    tiles.forEach(tile => {
+        if (tile.content !== '') tile.content = '';
+        newTiles.push(tile)
+    });
+    setTiles(newTiles);
+
+    setGameState({
+        currentRowFirstTile: 0,
+        currentTile: 0,
+        guessAttempts: 0
+                            });
+
+    setDialogMessage({
+        message: 'Good Luck!',
+        className: 'basic'
+                                });
 };
 
 // returns the last tile that its content is not an empty string.
@@ -135,50 +151,67 @@ const findLastFullTile = () => {
 };
 
 const removeLetter = () => {
+    if (gameState.currentTile !== 999) {
+        const tileIdToRemove = findLastFullTile();
+        const currentRowFirstTile = gameState.currentRowFirstTile;
     
-    const tileIdToRemove = findLastFullTile();
-    const currentRowFirstTile = gameState.currentRowFirstTile;
- 
-    if (tileIdToRemove !== undefined && ( (currentRowFirstTile <= tileIdToRemove && tileIdToRemove <= currentRowFirstTile + 4))) {
+        if (tileIdToRemove !== undefined && ( (currentRowFirstTile <= tileIdToRemove && tileIdToRemove <= currentRowFirstTile + 4))) {
 
-        const newTiles: Tile[] = [];
-        tiles.forEach(tile => {
-            if (tile.id === tileIdToRemove ) tile.content = '';
-            newTiles.push(tile);
-        });
-        setTiles(newTiles);
-        // deletion occured -> update current tile.
-        gameState.currentTile = tileIdToRemove;
-    };                                   
+            const newTiles: Tile[] = [];
+            tiles.forEach(tile => {
+                if (tile.id === tileIdToRemove ) tile.content = '';
+                newTiles.push(tile);
+            });
+            setTiles(newTiles);
+            // deletion occured -> update current tile.
+            gameState.currentTile = tileIdToRemove;
+        };
+    };                            
 };
 
 const enterClickHandler = () => {
 
-    if (tiles[gameState.currentRowFirstTile +4].content !== ''){
-
+    if (gameState.guessAttempts < 6 && tiles[gameState.currentRowFirstTile +4].content !== '' ){
+    
         let wordToCheck: string = '';
         // extract the word from relevant row
         const firstTileIndex: number = gameState.currentRowFirstTile;
         for (let i = firstTileIndex; i <= firstTileIndex+4 ; i++) {wordToCheck += tiles[i].content;}
 
-        
-       
-        setGameState({...gameState,
-                        currentRowFirstTile: gameState.currentRowFirstTile + 5,
-                        lastWordChecked: wordToCheck,});
-
         checkWordAtServer(wordToCheck)
             .then(res => {
                 if (res) {checkWordValidity(res)}
-                console.log(res)});
+            });
             
-
-   
         // restart word to check
         wordToCheck = '';
-
     };
 };
+
+/// fix hebrew letters bug
+const handleKeyPressed = (event: KeyboardEvent) => {
+    const { key, 
+            keyCode} = event;
+
+    if (keyCode >= 65 && keyCode <= 90) {
+        addLetter(event.key.toUpperCase());
+    } else if (key === 'Backspace') {
+        removeLetter();
+    } else if (key === 'Enter') {
+        enterClickHandler();
+    }
+};
+
+useEffect(() => {
+    window.addEventListener("keyup", (handleKeyPressed));
+    // console.log('added event listener');
+    return () => {
+        window.removeEventListener("keyup", handleKeyPressed);
+        // console.log('removed event listener');
+    }
+}, [handleKeyPressed]);
+
+
 
 const checkWordValidity = (resultArray: string[]) => {
 
@@ -201,17 +234,12 @@ const checkWordValidity = (resultArray: string[]) => {
         newTiles.push(tile)});
     setTiles(newTiles);
 
-    
-
-
-    determineDialogMessage(bullLetters, cowLetters);
+    determineWinOrNot(bullLetters, cowLetters);
     
     letterIndex = 0;
     bullLetters = 0;
     cowLetters = 0;
 };
-
-
 
 const failMessages = [  'Nice Try!',
                         'So Close!',
@@ -219,24 +247,30 @@ const failMessages = [  'Nice Try!',
                         'You\'re Getting There!',
                         'Almost!',
                         'Keep Trying!'];
-const determineDialogMessage = (bullLetters: number, cowLetters: number) =>{
+const determineWinOrNot = (bullLetters: number, cowLetters: number) =>{
     let newMessage: string = dialogMessage.message;
     let newClassName: string = dialogMessage.className;
+    let updatedCurrentTile: number;
+
+
     if ( bullLetters === 5 ) {
         newMessage = 'Well Done!';
         newClassName = 'victory';
+        updatedCurrentTile = 998;
     } else if (cowLetters > 0 ) {
         newMessage = failMessages[Math.floor(Math.random() * failMessages.length)];
-    }
+        updatedCurrentTile = gameState.currentTile + 1;
+    } else {updatedCurrentTile = gameState.currentTile + 1; }
     const newDialogMessage = {
         message: newMessage,
         className: newClassName,
     }
+
     setDialogMessage(newDialogMessage);
     setGameState({...gameState,
-        currentTile: gameState.currentTile + 1,
-        currentRowFirstTile: gameState.currentRowFirstTile+5})
-    
+        currentTile: updatedCurrentTile!,
+        currentRowFirstTile: gameState.currentRowFirstTile+5,
+        guessAttempts: gameState.guessAttempts + 1});
 };
 
 return (
@@ -247,6 +281,7 @@ return (
     setGameState,
     tiles,
     setTiles,
+    resetGame,
     addLetter,
     removeLetter,
     enterClickHandler,

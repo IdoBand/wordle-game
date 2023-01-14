@@ -4,17 +4,18 @@ export function serverRequests() {
     const endPoint = 'http//localhost:4000';
 
 
- const [encryptedObject, setEncryptedObject] = useState(null)
+ const [serverObject, setServerObject] = useState(null)
   async function getWordFromServer() {
     
         const response = await fetch('http://localhost:4000/getWord');
-        const encryptedObject = await response.json();
-        setEncryptedObject(encryptedObject);
+        const serverObject = await response.json();
+        console.log('test')
+        setServerObject(serverObject);
     };
 
     return ({
-        encryptedObject,
-        setEncryptedObject,
+        serverObject,
+        setServerObject,
         getWordFromServer
     })
 

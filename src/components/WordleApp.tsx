@@ -7,8 +7,6 @@ import DialogMessage from './DialogMessage';
 
 export function WordleApp() {
 
-  const wordleAPI = SharedLogicFunctions();
-  
   return (
     
       <section id="page-container" >

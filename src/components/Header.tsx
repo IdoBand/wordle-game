@@ -5,6 +5,7 @@ import HowToPlay from './HowToPlay';
 import { userContext } from '../providers/userContext';
 import { wordleContext } from '../providers/wordleContext';
 import { serverReqContext } from '../providers/serverReqContext';
+import { serverRequests } from '../serverRequests/server-requests';
 
 
 
@@ -15,7 +16,10 @@ export default function Header() {
 
     const {user, setUser} = useContext<any>(userContext)
 
-    const {getWordFromServer} = useContext<any>(wordleContext);
+    // const { getWordFromServer, serverObject} = useContext<any>(serverReqContext)
+    // const testApi = serverRequests();
+
+    const {getWordFromServer, resetGame} = useContext<any>(wordleContext);
 
     let localStorageUser = JSON.parse(localStorage.getItem('user') as string)
 
@@ -55,6 +59,7 @@ export default function Header() {
                 </div>
             </div>
         </header>
+        
 
         {modal && (
             <main className="modal">
@@ -66,8 +71,9 @@ export default function Header() {
                 
             </main>
         )}
-        
+
     <Outlet />
+    
     </>
     );
   }
