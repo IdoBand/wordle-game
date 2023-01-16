@@ -12,7 +12,6 @@ export default function SignInForm() {
     
     const extractAndAssign = (userObject: UserObject) => {
         localStorage.setItem('user', JSON.stringify(userObject))
-        // const currentUser = JSON.parse(localStorage.getItem('user') as string)
         setUser(userObject)
     };
     return (
@@ -20,13 +19,13 @@ export default function SignInForm() {
             <div id="sign-in-form-container">
                 
                 <form className="form" onSubmit={handleSubmit((data) => {
-                    console
-                    extractAndAssign(data)
+
+                    extractAndAssign(data as UserObject)
                 })}>
                     <div className="title">Welcome</div>
                     <div className="subtitle">Sign in to your account!</div>
                     <div className="input-container ic1">
-                        <input {...register("firstName")} id="firstname" className="input" type="text" placeholder=" "/>
+                        <input {...register("firstName")} id="firstname" className="input" type="text" placeholder=" " required/>
                         <div className="cut"></div>
                         <label className="placeholder">First name</label>
                     </div>

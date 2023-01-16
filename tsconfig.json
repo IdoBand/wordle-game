@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    // "baseUrl": "./src/test",
-    // "outDir": "./src/test",
+    "baseUrl": "./src/test",
+    "outDir": "./src/test",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
@@ -16,9 +16,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types":[
+      "node",
+      "cypress"
+    ]
   },
 
-  "include": ["src","**/*.ts"],
+  "include": ["src",
+              "**/*.ts",],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

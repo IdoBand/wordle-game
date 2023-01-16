@@ -10,11 +10,12 @@ export default function Keyboard() {
         addLetter,
         removeLetter,
         enterClickHandler,
-        checkWordAtServer,
     } = useContext<any>(wordleContext);
 
     function HandleClick(event: React.MouseEvent<HTMLButtonElement>) {
-        const buttonClicked = event.target.id;
+
+        const element = event.target as HTMLElement;
+        const buttonClicked = element.id;
         if (buttonClicked !== 'enter' && buttonClicked !== 'back'){
                 addLetter(buttonClicked);
         } else if (buttonClicked === 'back') {

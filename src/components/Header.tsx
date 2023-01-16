@@ -4,10 +4,6 @@ import { Outlet, Link } from 'react-router-dom';
 import HowToPlay from './HowToPlay';
 import { userContext } from '../providers/userContext';
 import { wordleContext } from '../providers/wordleContext';
-import { serverReqContext } from '../providers/serverReqContext';
-import { serverRequests } from '../serverRequests/server-requests';
-
-
 
 export default function Header() {
     const logoIMG = logo.default;
@@ -16,14 +12,11 @@ export default function Header() {
 
     const {user, setUser} = useContext<any>(userContext)
 
-    // const { getWordFromServer, serverObject} = useContext<any>(serverReqContext)
-    // const testApi = serverRequests();
-
     const {getWordFromServer, resetGame} = useContext<any>(wordleContext);
 
     let localStorageUser = JSON.parse(localStorage.getItem('user') as string)
 
-    const logOutuser = () =>{
+    const logOutUser = () =>{
         localStorage.removeItem('user')
         setUser(null)
     }
@@ -54,7 +47,7 @@ export default function Header() {
                         <Link to={'SignInForm'} className='menu-Links'>Sign In</Link>
                         <Link to={'App'} className='menu-Links' onClick={() => getWordFromServer()}>Start Playing</Link>
                         <div onClick={() => setModal(!modal)} className='menu-Links'>How To Play</div>
-                        <Link to={''} onClick={() =>logOutuser()} className='menu-Links' id="menu-Links-log-out">Log Out</Link>
+                        <Link to={''} onClick={() =>logOutUser()} className='menu-Links' id="menu-Links-log-out">Log Out</Link>
                     </div>
                 </div>
             </div>
