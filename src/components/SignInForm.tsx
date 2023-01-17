@@ -8,11 +8,11 @@ export default function SignInForm() {
     
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-    // const {user, setUser} = useContext<any>(userContext);
+    const {user, setUser} = useContext<any>(userContext);
     
     const extractAndAssign = (userObject: UserObject) => {
         localStorage.setItem('user', JSON.stringify(userObject))
-        // setUser(userObject)
+        setUser(userObject)
     };
     return (
         <>
