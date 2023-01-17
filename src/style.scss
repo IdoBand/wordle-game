@@ -423,7 +423,7 @@ $cow-color : rgb(248, 248, 30);
 
 #sign-in-form-container {
     @include flexCenter();
-    margin-top: 60px;
+    margin-top: 40px;
     position: relative;
     width: 90%;
 
@@ -459,7 +459,7 @@ $cow-color : rgb(248, 248, 30);
         font-family: sans-serif;
         font-size: 36px;
         font-weight: 600;
-        margin-top: 30px;
+        margin-top: 10px;
       }
       
       .subtitle {
@@ -474,6 +474,7 @@ $cow-color : rgb(248, 248, 30);
         height: 50px;
         position: relative;
         width: 100%;
+        padding: 5px 0 5px 0;
       }
       
       .ic1 {
@@ -493,7 +494,7 @@ $cow-color : rgb(248, 248, 30);
         font-size: 18px;
         height: 100%;
         outline: 0;
-        padding: 4px 20px 0;
+        padding: 5px 25px 5px 25px;
         width: 100%;
       }
       
@@ -541,6 +542,10 @@ $cow-color : rgb(248, 248, 30);
       
       .input:focus ~ .placeholder {
         color: aqua;
+      }
+      .error-span{
+        color: red;
+        margin-top: 1px;
       }
       
       .submit {

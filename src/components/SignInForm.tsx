@@ -5,14 +5,14 @@ import { UserObject } from "../interface/interface"
 
 
 export default function SignInForm() {
+    
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-    const { register, handleSubmit } = useForm();
-
-    const {user, setUser} = useContext<any>(userContext);
+    // const {user, setUser} = useContext<any>(userContext);
     
     const extractAndAssign = (userObject: UserObject) => {
         localStorage.setItem('user', JSON.stringify(userObject))
-        setUser(userObject)
+        // setUser(userObject)
     };
     return (
         <>
@@ -25,9 +25,10 @@ export default function SignInForm() {
                     <div className="title">Welcome</div>
                     <div className="subtitle">Sign in to your account!</div>
                     <div className="input-container ic1">
-                        <input {...register("firstName")} id="firstname" className="input" type="text" placeholder=" " required/>
+                        <input data-test="firstName-input" {...register("firstName", {required: true})} id="firstname" className="input" type="text" placeholder=" "/>
                         <div className="cut"></div>
                         <label className="placeholder">First name</label>
+                        {errors.firstName && <span className="error-span">This field is required</span>}
                     </div>
                     <div className="input-container ic2">
                         <input {...register("lastName")} id="lastname" className="input" type="text" placeholder=" " />
@@ -35,7 +36,7 @@ export default function SignInForm() {
                         <label className="placeholder">Last name</label>
                     </div>
                     <div className="input-container ic2">
-                        <input {...register("email")} id="email" className="input" type="text" placeholder=" " />
+                        <input {...register("email")} id="email" className="input" type="email" placeholder=" " />
                         <div className="cut cut-short"></div>
                         <label className="placeholder">Email</label>
                     </div>

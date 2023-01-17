@@ -22,7 +22,7 @@ const [gameState, setGameState] = useState({
 const [encryptedObject, setEncryptedObject] = useState(null)
 async function getWordFromServer() {
 
-    const response = await fetch('http://localhost:4000/getWord');
+    const response = await fetch('http://localhost:3333/getWord');
     const encryptedObject = await response.json();
     setEncryptedObject(encryptedObject);
 };
@@ -34,7 +34,7 @@ async function checkWordAtServer (guess: string, requestObject: EncryptedObject 
                         encryptedWord: requestObject.encrypted,
                         iv: requestObject.iv.data
                         }
-        const response = await fetch(`http://localhost:4000/guessWord`, {method: 'post',
+        const response = await fetch(`http://localhost:3333/guessWord`, {method: 'post',
                                                                         headers: {'Content-Type': 'application/json'},
                                                                         body: JSON.stringify(attempt)});
                         
