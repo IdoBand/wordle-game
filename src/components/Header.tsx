@@ -10,15 +10,16 @@ export default function Header() {
 
     const [modal, setModal] = useState(false);
 
-    const {user, setUser} = useContext<any>(userContext)
+    // const {user, setUser} = useContext<any>(userContext)
 
     const {getWordFromServer, resetGame} = useContext<any>(wordleContext);
 
     let localStorageUser = JSON.parse(localStorage.getItem('user') as string)
 
     const logOutUser = () =>{
-        localStorage.removeItem('user')
-        setUser(null)
+        localStorage.removeItem('user');
+        const emptyUser = {};
+        // setUser(emptyUser);
     }
     useEffect(() => {}, [localStorageUser])
 

@@ -2,7 +2,7 @@ import './style.scss';
 import { useState, useMemo } from 'react';
 import { userContext } from './providers/userContext';
 import Header from './components/Header';
-import { SharedLogicFunctions } from './components/SharedLogicFunctions';
+import { SharedLogicFunctions } from './components/gameLogic';
 import { wordleContext } from './providers/wordleContext';
 
 

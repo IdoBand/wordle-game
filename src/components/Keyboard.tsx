@@ -1,5 +1,5 @@
 import { wordleContext } from "../providers/wordleContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export default function Keyboard() {
     const firsRow = ['Q','W','E','R','T','Y','U','I','O','P'];
@@ -10,7 +10,17 @@ export default function Keyboard() {
         addLetter,
         removeLetter,
         enterClickHandler,
+        handleKeyPressed
     } = useContext<any>(wordleContext);
+  
+    useEffect(() => {
+        window.addEventListener("keyup", (handleKeyPressed));
+        // console.log('added event listener');
+        return () => {
+            window.removeEventListener("keyup", handleKeyPressed);
+            // console.log('removed event listener');
+        }
+    }, [handleKeyPressed]);
 
     function HandleClick(event: React.MouseEvent<HTMLButtonElement>) {
 
@@ -22,7 +32,7 @@ export default function Keyboard() {
                 removeLetter();
         } else {
                 enterClickHandler();
-        }
+        };
     };
 
     return (

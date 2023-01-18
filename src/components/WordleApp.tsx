@@ -1,7 +1,7 @@
 import Tiles from './Tiles';
 import Keyboard from './Keyboard'
 import IndicatorsMap from './IndicatorsMap';
-import { SharedLogicFunctions } from './SharedLogicFunctions';
+import { SharedLogicFunctions } from './gameLogic';
 import { wordleContext } from '../providers/wordleContext';
 import DialogMessage from './DialogMessage';
 

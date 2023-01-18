@@ -1,8 +1,6 @@
-import { useState, useEffect, useContext, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { Tile } from '../interface/interface';
 import { EncryptedObject } from '../interface/interface';
-import { serverReqContext } from '../providers/serverReqContext';
 export function SharedLogicFunctions() {
 
 
@@ -27,7 +25,6 @@ async function getWordFromServer() {
     setEncryptedObject(encryptedObject);
 };
 
-
 async function checkWordAtServer (guess: string, requestObject: EncryptedObject = encryptedObject!) {
     if (requestObject) {
         const attempt = {guess: guess,
@@ -42,27 +39,6 @@ async function checkWordAtServer (guess: string, requestObject: EncryptedObject 
         return resultArray;
     };
 };
-
-
-
-const userInfo = {
-    name: 'user',
-    email: '',
-};
-
-
-// let location =useLocation()
-
-// useEffect(()=> {
-//     console.log(location)
-//     if (location.pathname === '/App') {
-//         window.addEventListener("keyup", (handleKeyPressed));
-//         console.log('added event listener')
-//     } else {
-//         window.removeEventListener("keyup", handleKeyPressed);
-//         console.log('removed event listener')
-//     }
-// },[])
 
 // game board
 const [tiles, setTiles] = useState([
@@ -115,8 +91,8 @@ const addLetter = (letter: string) => {
 
     if (!( (gameState.currentTile+1) % 5 === 0)) {
         gameState.currentTile += 1;
-    } 
-    }
+        } ;
+    };
 };
 
 const resetGame = () => {
@@ -163,7 +139,7 @@ const removeLetter = () => {
                 newTiles.push(tile);
             });
             setTiles(newTiles);
-            // deletion occured -> update current tile.
+            // deletion occurred -> update current tile.
             gameState.currentTile = tileIdToRemove;
         };
     };                            
@@ -192,7 +168,6 @@ const enterClickHandler = () => {
 const handleKeyPressed = (event: KeyboardEvent) => {
     const { key, 
             keyCode} = event;
-
     if (keyCode >= 65 && keyCode <= 90) {
         addLetter(event.key.toUpperCase());
     } else if (key === 'Backspace') {
@@ -202,16 +177,14 @@ const handleKeyPressed = (event: KeyboardEvent) => {
     }
 };
 
-useEffect(() => {
-    window.addEventListener("keyup", (handleKeyPressed));
-    // console.log('added event listener');
-    return () => {
-        window.removeEventListener("keyup", handleKeyPressed);
-        // console.log('removed event listener');
-    }
-}, [handleKeyPressed]);
-
-
+// useEffect(() => {
+//     window.addEventListener("keyup", (handleKeyPressed));
+//     // console.log('added event listener');
+//     return () => {
+//         window.removeEventListener("keyup", handleKeyPressed);
+//         // console.log('removed event listener');
+//     }
+// }, [handleKeyPressed]);
 
 const checkWordValidity = (resultArray: string[]) => {
 
@@ -252,7 +225,6 @@ const determineWinOrNot = (bullLetters: number, cowLetters: number) =>{
     let newClassName: string = dialogMessage.className;
     let updatedCurrentTile: number;
 
-
     if ( bullLetters === 5 ) {
         newMessage = 'Well Done!';
         newClassName = 'victory';
@@ -275,7 +247,6 @@ const determineWinOrNot = (bullLetters: number, cowLetters: number) =>{
 
 return (
     {
-    userInfo,
     dialogMessage,
     gameState,
     setGameState,
@@ -284,6 +255,7 @@ return (
     resetGame,
     addLetter,
     removeLetter,
+    handleKeyPressed,
     enterClickHandler,
     getWordFromServer,
     encryptedObject,
