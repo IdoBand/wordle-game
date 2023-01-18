@@ -10,7 +10,7 @@ export default function Header() {
 
     const [modal, setModal] = useState(false);
 
-    // const {user, setUser} = useContext<any>(userContext)
+    const {user, setUser} = useContext<any>(userContext)
 
     const {getWordFromServer, resetGame} = useContext<any>(wordleContext);
 
@@ -19,7 +19,7 @@ export default function Header() {
     const logOutUser = () =>{
         localStorage.removeItem('user');
         const emptyUser = {};
-        // setUser(emptyUser);
+        setUser(emptyUser);
     }
     useEffect(() => {}, [localStorageUser])
 
