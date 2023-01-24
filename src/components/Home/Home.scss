@@ -1,0 +1,72 @@
+
+// a shortcut to center items inside a parent div
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+// used for tiles and keyboard
+  @mixin boxShadow {
+    box-shadow: 2px 2px rgb(159, 157, 157);
+  }
+
+@mixin rgbAnimation-container {
+    position: relative;
+    background: linear-gradient(0deg,#000,#262626);
+    color: white;
+    border-radius: 5px;
+}
+
+@mixin rgbAnimation-before {
+    border-radius: 5px;
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background: linear-gradient(45deg, #fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    background-size: 400%;
+    z-index: -1;
+    animation: animate 25s linear infinite;
+}
+
+@mixin keyframes-animation {
+    @keyframes animate {
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 250% 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    }
+}
+
+// ################################       home page         ################################
+
+#welcome-container {
+    @include rgbAnimation-container();
+    @include flexCenter();
+    margin: 150px auto;
+    width: 600px;
+    height: 250px;
+
+
+    &:before {
+        @include rgbAnimation-before();
+    }
+
+    @include keyframes-animation();
+}
+
+#welcome-message{
+    padding: 10px;
+    text-align: center;
+    font-size: 26px;
+    border-radius: 10px;
+    color: white;
+}

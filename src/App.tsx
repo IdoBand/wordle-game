@@ -1,7 +1,6 @@
-import './style.scss';
 import { useState, useMemo } from 'react';
 import { userContext } from './providers/userContext';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import { SharedLogicFunctions } from './components/gameLogic';
 import { wordleContext } from './providers/wordleContext';
 

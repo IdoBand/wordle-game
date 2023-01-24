@@ -1,4 +1,4 @@
-import { wordleContext } from "../providers/wordleContext";
+import { wordleContext } from "../../providers/wordleContext";
 import { useContext, useEffect } from "react";
 
 export default function Keyboard() {

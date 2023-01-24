@@ -1,18 +1,20 @@
 import { useContext } from "react";
-import { userContext } from "../providers/userContext";
+import { userContext } from "../../providers/userContext";
 import { useForm } from "react-hook-form";
-import { UserObject } from "../interface/interface"
+import { User } from "../../interface/interface"
+import { wordleContext } from "../../providers/wordleContext";
 
 
 export default function SignInForm() {
     
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-    const {user, setUser} = useContext<any>(userContext);
-    
-    const extractAndAssign = (userObject: UserObject) => {
-        localStorage.setItem('user', JSON.stringify(userObject))
-        setUser(userObject)
+    const { user, setUser } = useContext<any>(userContext);
+    const { loginForToken } = useContext<any>(wordleContext)
+    const extractAndAssign = (userObject: User) => {
+        localStorage.setItem('user', JSON.stringify(userObject));
+        setUser(userObject);
+        loginForToken(userObject);
     };
     return (
         <>
@@ -20,7 +22,7 @@ export default function SignInForm() {
                 
                 <form className="form" onSubmit={handleSubmit((data) => {
 
-                    extractAndAssign(data as UserObject)
+                    extractAndAssign(data as User);
                 })}>
                     <div className="title">Welcome</div>
                     <div className="subtitle">Sign in to your account!</div>

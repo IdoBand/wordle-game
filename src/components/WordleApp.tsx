@@ -1,9 +1,7 @@
-import Tiles from './Tiles';
-import Keyboard from './Keyboard'
-import IndicatorsMap from './IndicatorsMap';
-import { SharedLogicFunctions } from './gameLogic';
-import { wordleContext } from '../providers/wordleContext';
-import DialogMessage from './DialogMessage';
+import Tiles from './Tiles/Tiles';
+import Keyboard from './Keyboard/Keyboard'
+import IndicatorsMap from './IndicatorsMap/IndicatorsMap';
+import DialogMessage from './DialogMessage/DialogMessage'
 
 export function WordleApp() {
 

@@ -1,5 +1,9 @@
 import { createContext } from "react";
 
-let initial: {} ={};
+const initial = () => {
+    let user = JSON.parse(localStorage.getItem('user') as string);
+    if (!user) { user = {} };
+    return user;
+};
 
-export const wordleContext = createContext(initial);
+export const wordleContext = createContext(initial());

@@ -4,7 +4,7 @@ export interface Tile {
     className: string
 }
 
-export interface UserObject {
+export interface User {
     firstName: string,
     lastName?: string,
     email?: string

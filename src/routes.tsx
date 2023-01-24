@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import { Home } from './components/Home'
+import { Home } from './components/Home/Home'
 import { WordleApp } from './components/WordleApp';
-import SignInForm from './components/SignInForm';
+import SignInForm from './components/SignInForm/SignInForm';
 
 export const router = createBrowserRouter([
     {

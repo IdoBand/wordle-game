@@ -1,0 +1,204 @@
+// a shortcut to center items inside a parent div
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+// used for tiles and keyboard
+  @mixin boxShadow {
+    box-shadow: 2px 2px rgb(159, 157, 157);
+  }
+
+@mixin rgbAnimation-container {
+    position: relative;
+    background: linear-gradient(0deg,#000,#262626);
+    color: white;
+    border-radius: 5px;
+}
+
+@mixin rgbAnimation-before {
+    border-radius: 5px;
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background: linear-gradient(45deg, #fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    background-size: 400%;
+    z-index: -1;
+    animation: animate 25s linear infinite;
+}
+
+@mixin keyframes-animation {
+    @keyframes animate {
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 250% 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    }
+}
+
+// ################################ header & dropdown ################################
+header {
+    @include flexCenter();
+    background-color:black;
+    border-bottom: 5px solid;
+    border-bottom-color: white;
+    min-height: 50px;
+
+    padding: 2px;
+    position: relative;
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 30px;
+        position: absolute;
+        left: 5px;
+    }
+
+    h1 {
+        font-size: 30px;
+        padding: 0;
+        margin: 0;
+        text-shadow: 1px 1px white;
+        color: white;
+    }
+
+    #user-hello-dropdown-container{
+        @include flexCenter();
+        position: absolute;
+        right: 5px;
+        
+        #user-hello {
+            @include flexCenter();
+            padding: 10px;
+            font-size: 20px;
+            color: white;
+        }
+    }
+}
+@mixin basicButton {
+    @include flexCenter();
+    background-color: rgb(132, 235, 228);
+    border-radius: 10px;
+    border: 1.5px solid black;
+    font-size: 18px;
+
+    &:hover {
+        background-color: darkcyan;
+        color: white;
+        
+    }
+}
+
+.options {
+    @include basicButton();
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    margin-right: 7px;
+    border-radius: 5px;
+}
+
+.dropdown {
+    position: relative;
+
+}
+
+.dropdown-menu {
+    background: linear-gradient(45deg,#000,#262626);
+    position: absolute;
+    width: 150px;
+    right: 0;
+    top: calc(100% + 1.2rem);
+    border: 1px solid #fff ;
+    border-radius: 5px;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown > .options:focus +.dropdown-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.menu-Links {
+    background: transparent;
+    color: #fff;
+    padding: 10px;
+    cursor: pointer;
+    
+    &:hover {
+        @include rgbAnimation-container();
+        pointer-events: auto;
+        border-radius: 5px;
+        &:before{
+            @include rgbAnimation-before();
+        }
+        @include keyframes-animation();
+        
+    }
+}
+
+#menu-Links-log-out{
+    &:hover {
+        background-color: rgb(221, 118, 118);
+    }
+}
+
+
+// ################################ modal PopUp HOW TO PLAY ################################
+#how-to-play-header{
+    font-size: x-large;
+    font-weight: 600;
+}
+
+.close-modal {
+    display: block;
+    margin: auto auto 0;
+    @include basicButton();
+    background: rgb(239, 108, 108);
+}
+
+
+.modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 988;
+
+}
+.overlay {
+    background: rgba(49,49,49,0.8);
+}
+
+.modal-content {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    background: white;
+    transform: translate(-50%, -50%);
+    line-height: 1.4;
+    padding: 14px 28px;
+    border-radius: 10px;
+    max-width: 600px;
+    min-width: 300px;
+    z-index: 999;
+}

@@ -1,7 +1,5 @@
-import { wordleContext } from "../providers/wordleContext"
+import { wordleContext } from "../../providers/wordleContext"
 import { useContext } from "react"
-
-
 
 
 export default function DialogMessage(){

@@ -1,0 +1,119 @@
+// a shortcut to center items inside a parent div
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+$default-tile-color: rgb(90, 83, 83);
+$bull-color: rgb(4, 188, 102);
+$cow-color : rgb(248, 248, 30);
+
+// ################################ keyboard ################################
+
+#keyboard {
+    padding: 0;
+    margin: 0;
+    @include flexCenter();
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 600px;
+}
+
+.keyboard-row {
+    margin: 5px;
+    gap: 5px;
+    
+
+.key {
+    height: 50px;
+    width: 50px;
+    border: 1px solid black;
+    background-color: rgb(204, 188, 188);
+    border-radius: 10px;
+    box-shadow: 2px 2px rgb(181, 177, 177,0.9);
+
+    &:hover {
+        background-color: rgb(0, 139, 139);
+        color: white;
+        cursor: pointer;
+        }
+    }
+
+@mixin enter-back-theme {
+    width: 85px;
+    background-color: azure;
+    
+}
+@mixin enter-back-theme-hover {
+    cursor: pointer;
+    background-color: rgb(221, 118, 118);
+}
+
+#enter {
+    @include enter-back-theme();
+    &:hover {
+        @include enter-back-theme-hover()
+        }
+    }
+
+#back {
+    @include enter-back-theme();
+    &:hover {
+        @include enter-back-theme-hover()
+        }
+    }
+}
+
+// ################################ letters-indicator-map ################################
+
+#keyboard-map-container{
+    display: flex;
+    margin-top: 10px;
+}
+
+#indicators-container {
+    left: 20px;
+    width: 170px;
+    border-radius: 5px;
+    min-height: 180px;
+    box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 0.5);
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+
+#letters-indicator-map {
+    color: white;
+    display: block;
+    position: relative;
+    padding-top: 5px;
+    min-width: 150px;
+
+    .indicator {
+        height: 40px;
+        width: 40px;
+        border: 1px solid black;
+        background-color: rgb(204, 188, 188);
+        border-radius: 10px;
+        box-shadow: 2px 2px black;
+        margin: 5px;
+        
+    }
+
+    #empty {
+        background-color: $default-tile-color;
+    }
+    #cow {
+        background-color: $cow-color;
+    }
+    #bull {
+        background-color: $bull-color;
+    }
+
+}
+
+// ################################       filler       ################################
+#filler {
+    min-width: 170px;
+    opacity: 0;
+}

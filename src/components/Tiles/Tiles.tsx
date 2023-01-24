@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { wordleContext } from "../providers/wordleContext";
-import { Tile } from "../interface/interface";
+import { wordleContext } from "../../providers/wordleContext";
+import { Tile } from "../../interface/interface";
 
 export default function Tiles() {
 
@@ -12,6 +12,6 @@ export default function Tiles() {
             className={tile.className} 
             id={tile.id.toString()} 
              >{tile.content}</div>
-    )   
+      )   
     );
   }

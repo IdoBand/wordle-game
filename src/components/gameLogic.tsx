@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { Tile } from '../interface/interface';
-import { EncryptedObject } from '../interface/interface';
+import { Tile, User, EncryptedObject } from '../interface/interface';
+
 export function SharedLogicFunctions() {
-
-
 
 // a message to interact with the user
 const [dialogMessage, setDialogMessage ] = useState({
@@ -31,14 +29,27 @@ async function checkWordAtServer (guess: string, requestObject: EncryptedObject 
                         encryptedWord: requestObject.encrypted,
                         iv: requestObject.iv.data
                         }
-        const response = await fetch(`http://localhost:3333/guessWord`, {method: 'post',
-                                                                        headers: {'Content-Type': 'application/json'},
-                                                                        body: JSON.stringify(attempt)});
+        const response = await fetch(`http://localhost:3333/guessWord`, { method: 'post',
+                                                                                        headers: {'Content-Type': 'application/json'},
+                                                                                        body: JSON.stringify(attempt)});
                         
         const resultArray = await response.json();
         return resultArray;
     };
 };
+let token: string;
+async function loginForToken (userObject: User) {
+    const user = {firstName: userObject.firstName,
+                    lastName: userObject.lastName,
+                    email: userObject.email
+                    }
+    const response = await fetch(`http://localhost:3333/login`, { method: 'post',
+                                                                                headers: {'Content-Type': 'application/json'},
+                                                                                body: JSON.stringify(user)});
+    const resultTokenObject = await response.json();
+    token = resultTokenObject.accessToken;
+    console.log(token)
+}
 
 // game board
 const [tiles, setTiles] = useState([
@@ -164,7 +175,6 @@ const enterClickHandler = () => {
     };
 };
 
-/// fix hebrew letters bug
 const handleKeyPressed = (event: KeyboardEvent) => {
     const { key, 
             keyCode} = event;
@@ -176,15 +186,6 @@ const handleKeyPressed = (event: KeyboardEvent) => {
         enterClickHandler();
     }
 };
-
-// useEffect(() => {
-//     window.addEventListener("keyup", (handleKeyPressed));
-//     // console.log('added event listener');
-//     return () => {
-//         window.removeEventListener("keyup", handleKeyPressed);
-//         // console.log('removed event listener');
-//     }
-// }, [handleKeyPressed]);
 
 const checkWordValidity = (resultArray: string[]) => {
 
@@ -236,7 +237,7 @@ const determineWinOrNot = (bullLetters: number, cowLetters: number) =>{
     const newDialogMessage = {
         message: newMessage,
         className: newClassName,
-    }
+    };
 
     setDialogMessage(newDialogMessage);
     setGameState({...gameState,
@@ -260,5 +261,6 @@ return (
     getWordFromServer,
     encryptedObject,
     checkWordAtServer,
+    loginForToken
     }
 )}

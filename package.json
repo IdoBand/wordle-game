@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "mocha -r ts-node/register src/test/*.test.ts",
     "cy": "npx cypress open -b chrome --component"
   },
   "dependencies": {
