@@ -108,9 +108,19 @@ header {
     border-radius: 5px;
 }
 
-.dropdown {
+.dropdown-container {
     position: relative;
+}
 
+.dropdown-overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 1;
 }
 
 .dropdown-menu {
@@ -123,13 +133,13 @@ header {
     border-radius: 5px;
     opacity: 0;
     transform: translateY(-10px);
-    pointer-events: none;
-    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+    z-index: 2;
+    // transition: opacity 50ms ease-in-out, opacity 50ms ease-in-out;
     display: flex;
     flex-direction: column;
 }
 
-.dropdown > .options:focus +.dropdown-menu {
+.dropdown-container > .options:focus +.dropdown-menu {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -158,7 +168,6 @@ header {
         background-color: rgb(221, 118, 118);
     }
 }
-
 
 // ################################ modal PopUp HOW TO PLAY ################################
 #how-to-play-header{

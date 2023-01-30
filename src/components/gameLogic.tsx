@@ -48,7 +48,6 @@ async function loginForToken (userObject: User) {
                                                                                 body: JSON.stringify(user)});
     const resultTokenObject = await response.json();
     token = resultTokenObject.accessToken;
-    console.log(token)
 }
 
 // game board

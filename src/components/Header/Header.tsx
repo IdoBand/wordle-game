@@ -9,6 +9,8 @@ export default function Header() {
 
     const [modal, setModal] = useState(false);
 
+    const [dropDownMenu, setDropDownMenu] = useState(false);
+
     const {user, setUser} = useContext<any>(userContext)
 
     const {getWordFromServer, resetGame} = useContext<any>(wordleContext);
@@ -40,19 +42,23 @@ export default function Header() {
                 <div id="user-hello">Sign In &#10154;</div>
                 }
                 
-                <div className='dropdown'>
-                    <button className='options'>&#9776;</button>
-                    <div className='dropdown-menu'>
-                        <Link to={''} className='menu-Links'>Home Page</Link>
-                        <Link to={'SignInForm'} className='menu-Links'>Sign In</Link>
-                        <Link to={'App'} className='menu-Links' onClick={() => getWordFromServer()}>Start Playing</Link>
-                        <Link to={''} onClick={() => setModal(!modal)} className='menu-Links'>How To Play</Link>
-                        <Link to={''} onClick={() =>logOutUser()} className='menu-Links' id="menu-Links-log-out">Log Out</Link>
-                    </div>
+                <div className='dropdown-container'>
+                    <button className='options' onClick={() => setDropDownMenu(!dropDownMenu) }>&#9776;</button>
+                    {dropDownMenu &&(
+                        <>
+                            <div className='dropdown-menu'>
+                                <Link to={''} className='menu-Links' onClick={() => setDropDownMenu(!dropDownMenu) }>Home Page</Link>
+                                <Link to={'SignInForm'} className='menu-Links' onClick={() => setDropDownMenu(!dropDownMenu) }>Sign In</Link>
+                                <Link to={'App'} className='menu-Links' onClick={() => {getWordFromServer(); setDropDownMenu(!dropDownMenu)}}>Start Playing</Link>
+                                <Link to={''} onClick={() => {setModal(!modal); setDropDownMenu(!dropDownMenu)}} className='menu-Links'>How To Play</Link>
+                                <Link to={''} onClick={() => {logOutUser(); setDropDownMenu(!dropDownMenu)}} className='menu-Links' id="menu-Links-log-out">Log Out</Link>
+                            </div>
+                            <div className="dropdown-overlay" onClick={() => setDropDownMenu(!dropDownMenu)}></div>
+                        </>
+                    )}
                 </div>
             </div>
         </header>
-        
 
         {modal && (
             <main className="modal">
@@ -65,7 +71,6 @@ export default function Header() {
                     <h3>&#8226; One letter can appear more than once in the word.</h3>
                     <h3>&#8226; After selecting 5 letters, press 'Enter' to find out whether you're correct or how close were you.</h3>
                 </div>
-                
             </main>
         )}
 

@@ -21,29 +21,27 @@ describe('Header Component', () => {
             .get('.menu-Links').should('have.length', 5)
     });
     it('.dropdown menu should be visible only after clicking .options button', () => {
-        cy.get('.dropdown-menu').should('not.be.visible');
+        cy.get('.dropdown-menu').should('not.exist');
         cy.get('.options').click();
-        cy.get('.dropdown-menu').should('be.visible');
-    
+        cy.get('.dropdown-menu').should('exist');
     });
     it('.modal does not exist before clicking on "How To Play"', () => {
-        cy.get('.modal').should('not.exist')
+        cy.get('.modal').should('not.exist');
+        cy.get('.options').click();
+        cy.get('.menu-Links').eq(3).click()
+            .get('.modal').should('be.visible')
     });
-    // it('modal exists after clicking on "How To Play"', () => {
-    //     // cy.get('.options')
-    //     cy.get('.options').click()
-    //     cy.get('.dropdown-menu').should('be.visible')
-    //     cy.get('.dropdown-menu').children()
-    //     .should('contain', 'How To Play')
-
-        // cy.get('.dropdown-menu').children()
-        //     .should('contain', 'How To Play')
-        // cy.get('.options')
-        //     .click()
-        //     .get('.dropdown-menu')
-            // .get('.menu-Links').eq(3).click()
-            // .get('.modal').should('be.visible')
-    // });
-    
-    
+    it('.modal should be closed after clicking on .close-modal button', () => {
+        cy.get('.options').click();
+        cy.get('.menu-Links').eq(3).click();
+        cy.get('.close-modal').click();
+        cy.get('.modal').should('not.exist');
+    });
+    it('.modal should be closed after clicking on .overlay', () => {
+        cy.get('.options').click();
+        cy.get('.menu-Links').eq(3).click();
+        // .overlay's center is covered by modal -> have to force click().
+        cy.get('.overlay').click({force: true});
+        cy.get('.modal').should('not.exist');
+    });
 });

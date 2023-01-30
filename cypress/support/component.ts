@@ -17,6 +17,12 @@
 import './commands'
 
 import '../../src/style.scss'
+import '../../src/components/Keyboard/keyboard.scss'
+import '../../src/components/DialogMessage/DialogMessage.scss'
+import '../../src/components/Header/Header.scss'
+import '../../src/components/SignInForm/SignInForm.scss'
+import '../../src/components/Tiles/Tiles.scss'
+import '../../src/components/Home/Home.scss'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
